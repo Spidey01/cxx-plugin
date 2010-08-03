@@ -1,0 +1,37 @@
+CXX=cl /nologo
+CXXFLAGS=/MD /EHsc /W3 /I.\include
+
+all: CxxPlugin.obj
+
+test: tests\test.exe
+	PUSHD tests && .\test.exe && POPD
+
+docs:
+	doxygen docs\Doxyfile
+
+clean:
+	DEL /Q *.obj tests\*.obj tests\test.exe tests\*.dll tests\*.exp tests\*.lib
+
+
+
+CxxPlugin.obj: src\CxxPlugin.cxx include\CxxPlugin.hxx include\CxxPluginPlatform.h
+	$(CXX) $(CXXFLAGS) /Fo$@ /c src\CxxPlugin.cxx
+
+
+# For building stuff in tests\
+#
+tests\test.obj: tests\test.cpp
+	$(CXX) $(CXXFLAGS) /Fo$@ /c tests\test.cpp
+
+tests/myplugin.obj: tests\myplugin.cpp tests\myplugin.hpp
+	$(CXX) $(CXXFLAGS) /Fo$@ /c tests\myplugin.cpp
+
+tests\myplugin.dll: tests\myplugin.obj
+	$(CXX) $(CXXFLAGS) /LD /Fe$@ tests\myplugin.obj
+
+tests\test.exe: tests\test.obj CxxPlugin.obj tests\myplugin.dll
+	$(CXX) $(CXXFLAGS) /Fe$@  tests\test.obj CxxPlugin.obj
+
+dumpbin: tests\myplugin.dll
+	dumpbin /exports tests\myplugin.dll
+

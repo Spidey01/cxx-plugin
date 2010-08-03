@@ -1,0 +1,35 @@
+CXX=g++
+CXXFLAGS=-Wall -fPIC -Iinclude
+#
+# Note that libdl is Linux specific, set this to nothing on BSD systems.
+#
+LDFLAGS=-ldl
+
+all: CxxPlugin.o
+
+docs:
+	doxygen docs/Doxyfile
+
+clean:
+	rm -f *.o tests/*.o tests/*.so tests/test
+
+
+CxxPlugin.o: src/CxxPlugin.cxx include/CxxPlugin.hxx include/CxxPluginPlatform.h
+	$(CXX) $(CXXFLAGS) -o $@ -c $<
+
+
+# For building the tests
+#
+tests/test.o: tests/test.cpp
+	$(CXX) $(CXXFLAGS) -o $@ -c $<
+
+tests/myplugin.o: tests/myplugin.cpp tests/myplugin.hpp
+	$(CXX) $(CXXFLAGS) -o $@ -c $<
+
+tests/myplugin.so: tests/myplugin.o
+	$(CXX) $(CXXFLAGS) -shared -rdynamic -o $@ $<
+
+test: tests/test.o CxxPlugin.o tests/myplugin.so
+	$(CXX) $(CXXFLAGS) $(LDFLAGS) -o tests/$@ tests/test.o CxxPlugin.o
+	cd tests && ./$@
+

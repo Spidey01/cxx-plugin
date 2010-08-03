@@ -1,0 +1,64 @@
+This is a simple C++ class encapsulating "Plugins". Have fun.
+
+
+HOW TO BUILD:
+============
+
+Generally, just compile it as a static or shared library. In many cases you can
+just copy the source files into your projects build.
+
+Look in the makefiles directory for some ideas.
+
+	make -f makefiles/Makefile.gcc
+	nmake /nologo /f makefiles/Makefile.msvc
+
+Should also give you an idea.
+
+HOW TO USE:
+==========
+
+Create a CxxPlugin object, passing the file name (minus the extension) of the
+plugin file to the constructor.  The class will figure out what platform
+specific extension (.dll, .so, .dylib) needs to be appended.
+
+Once that is done, use the load_funcptr and load_functor methods to
+respectively extract function pointers and function objects out of the plugin.
+
+When the CxxPlugin is destroyed, it will attempt to unload the plugin from your
+program. If that actually does anything meaningful, is not guaranteed by
+CxxPlugin.
+
+
+Look in the tests directory for usage examples of both a mediocre plugin and a
+program to load it via CxxPlugin. Building info for compiling your own plugins
+can be guesed by reading makefiles/Makefile.compilername, or your systems
+documentation. I'm not a psychic.
+
+DOCUMENTATION:
+=============
+
+Any C++ programmer should be able to figure it out from reading the header
+file, it is suitably commented to make it even more obvious. 
+
+If you have Doxygen installed, you can generate HTML documentation for use with
+a web browser; the included Doxyfile places that documentation in a top level
+"docs" folder when you run doxygen.
+
+The makefiles have a target called "docs" that will run doxygen. It assumes that the doxygen program is in your command prompts path.
+
+NOTES:
+=====
+
+I don't have a Mac, so can't test whether or not it actually *works* under Mac
+OS X.  If you do and it does, please send me a message ;). Patches welcome.
+
+Support for using a custom file extension might be added later, either via the
+constructor or a compile time preprocessor directive.
+
+I'm sorry but loading a library as a "Framework" in MacOS X is not supported
+right now. Support for a custom file extension might work.
+
+
+The usages of the .cxx, .hxx, and .h extensions are intentional. Contrast this
+against the more "Commonly" named stuff in tests/. CppPlugin just didn't have
+that ring to it like CxxPlugin does ;).

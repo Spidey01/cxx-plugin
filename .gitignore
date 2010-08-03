@@ -1,0 +1,10 @@
+*.o
+*obj
+*.so
+*.dll
+*.lib
+*.exp
+*.dylib
+*.exe
+tests/test
+docs/html
