@@ -8,3 +8,5 @@
 *.exe
 tests/test
 docs/html
+build/*
+.gradle/*

@@ -1,0 +1,133 @@
+
+description 'A simple C++ interface to using "Plugins"'
+version = '1.0'
+
+
+apply plugin: 'cpp'
+
+model {
+    platforms {
+        linux_amd64 {
+            architecture "amd64"
+            operatingSystem "linux"
+        }
+
+        linux_i386 {
+            architecture "i386"
+            operatingSystem "linux"
+        }
+
+        windows_amd64 {
+            architecture "amd64"
+            operatingSystem "windows"
+        }
+        windows_i386 {
+            architecture "i386"
+            operatingSystem "windows"
+        }
+
+        osx_amd64 {
+            architecture "amd64"
+            operatingSystem "osx"
+        }
+
+        // patches welcome for other OSes.
+    }
+
+
+    binaries.all {
+        if (NDEBUG) {
+            cppCompiler.define 'NDEBUG'
+        }
+
+        if (toolChain in Gcc) {
+            cppCompiler.args '-Wall', '-fPIC'
+            if (targetPlatform.operatingSystem == 'linux') {
+                // Adding -ldl to linker/compiler doesn't
+                // here doesn't work :(.
+            }
+        }
+        else if (toolChain in VisualCpp) {
+            cppCompiler.args MSCRT, MSEH, '/W3'
+        }
+    }
+}
+
+
+sources {
+    main {
+        cpp {
+            source {
+                srcDir 'src'
+            }
+            exportedHeaders {
+                srcDir 'include'
+            }
+        }
+    }
+
+    test {
+        cpp {
+            source {
+                srcDir 'tests'
+                include 'test.cpp', 'plugin.hxx'
+            }
+        }
+    }
+
+    myplugin {
+        cpp {
+            source {
+                srcDir 'tests'
+                include 'myplugin.cpp', 'myplugin.hpp'
+            }
+        }
+    }
+}
+
+
+libraries {
+    // The actual library.
+    CxxPlugin {
+        source sources.main
+    }
+
+    // Used by test executable.
+    myplugin {
+        source sources.myplugin
+        binaries.withType(StaticLibraryBinary) {
+            lib libraries.CxxPlugin.static
+        }
+        binaries.withType(SharedLibraryBinary) {
+            lib libraries.CxxPlugin.shared
+        }
+    }
+}
+
+
+executables {
+    test {
+        source sources.test
+        binaries.all {
+            if (targetPlatform.operatingSystem == 'linux') {
+                // No way to say 'lib ...' for external libs installed on the system.
+                // And on Linux we need libdl in order to get dlopen() and friends!
+            }
+            lib libraries.CxxPlugin
+        }
+    }
+}
+
+
+task build(description: 'Assembles and tests this project.') {
+    dependsOn binaries.withType(StaticLibraryBinary).matching {
+        it.buildable
+    }
+    dependsOn binaries.withType(SharedLibraryBinary).matching {
+        it.buildable
+    }
+    dependsOn binaries.withType(ExecutableBinary).matching {
+        it.buildable
+    }
+}
+

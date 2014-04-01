@@ -7,12 +7,16 @@ HOW TO BUILD:
 Generally, just compile it as a static or shared library. In many cases you can
 just copy the source files into your projects build.
 
-Look in the makefiles directory for some ideas.
+It is possible to build this project from source like so:
+
+	./gradlew build
+
+Look in the makefiles directory for some other ideas.
 
 	make -f makefiles/Makefile.gcc
 	nmake /nologo /f makefiles/Makefile.msvc
 
-Should also give you an idea.
+Which should also give you an idea.
 
 HOW TO USE:
 ==========
