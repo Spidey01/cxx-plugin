@@ -7,4 +7,5 @@
 *.dylib
 *.exe
 tests/test
-docs/html
+doc/html
+.ninja_*
