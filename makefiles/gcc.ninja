@@ -1,0 +1,36 @@
+
+cxx = g++
+cxxflags = -Wall -fPIC -Iinclude
+
+ldflags = -ldl
+
+rule object
+    command = $cxx $cxxflags -o $out -c $in
+
+rule plugin
+    command = $cxx $cxxflags -shared -rdynamic -o $out $in
+
+rule program
+    command = $cxx $cxxflags $ldflags -o $out $in
+
+rule doxygen
+    command = doxygen $in
+    generator = true
+
+rule exec
+    command = false
+
+build CxxPlugin.o: object src/CxxPlugin.cxx
+
+build tests/test.o: object tests/test.cpp
+build tests/test: program tests/test.o CxxPlugin.o
+
+build tests/myplugin.o: object tests/myplugin.cpp
+build tests/myplugin.so: plugin tests/myplugin.o
+
+build test: exec tests/test tests/myplugin.so
+    command = (cd tests && ./test)
+
+build doc/html/index.html: doxygen docs/Doxyfile
+
+build docs: phony doc/html/index.html
