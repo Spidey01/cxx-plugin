@@ -1,0 +1,37 @@
+
+cxx = cl /nologo
+cxxflags = /MD /EHsc /W3 /I.\include
+
+ldflags = 
+
+rule object
+    command = $cxx $cxxflags /Fo$out /c $in
+
+rule plugin
+    command = $cxx $cxxflags /LD /Fe$out $in
+
+rule program
+    command = $cxx $cxxflags $ldflags /Fe$out $in
+
+rule doxygen
+    command = doxygen $in
+    generator = true
+
+rule exec
+    command = false
+
+build CxxPlugin.obj: object src/CxxPlugin.cxx
+
+build tests/test.obj: object tests/test.cpp
+build tests/test: program tests/test.obj CxxPlugin.obj
+
+build tests/myplugin.obj: object tests/myplugin.cpp
+build tests/myplugin.dll: plugin tests/myplugin.obj
+
+build test: exec tests/test tests/myplugin.dll
+    command = cmd /c "(cd tests && .\test)"
+
+build doc/html/index.html: doxygen docs/Doxyfile
+
+build docs: phony doc/html/index.html
+
