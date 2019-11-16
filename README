@@ -12,6 +12,9 @@ Look in the makefiles directory for some ideas.
 	make -f makefiles/Makefile.gcc
 	nmake /nologo /f makefiles/Makefile.msvc
 
+	ninja -f makefiles\gcc.ninja
+	ninja -f makefiles\msvc.ninja
+
 Should also give you an idea.
 
 HOW TO USE:
