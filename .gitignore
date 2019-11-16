@@ -9,3 +9,5 @@
 tests/test
 doc/html
 .ninja_*
+Makefile
+build.ninja
