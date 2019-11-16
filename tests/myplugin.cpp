@@ -11,6 +11,7 @@ MyPlugin::prove()
 extern "C" CXXPLUGIN_API Plugin *
 new_myplugin(void)
 {
+    std::cout << "new MyPlugin" << std::endl;
     return new MyPlugin;
 }
 
