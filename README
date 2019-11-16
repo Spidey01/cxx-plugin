@@ -15,6 +15,11 @@ Look in the makefiles directory for some ideas.
 	ninja -f makefiles\gcc.ninja
 	ninja -f makefiles\msvc.ninja
 
+	cp makefiles/CMakeLists.txt ./
+	cmake -S . -B obj
+	cd obj
+	# whatever.
+
 Should also give you an idea.
 
 HOW TO USE:
