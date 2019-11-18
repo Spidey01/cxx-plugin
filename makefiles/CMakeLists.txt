@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.13)
 
 project(cxx-plugin)
 
@@ -16,7 +16,7 @@ if (UNIX)
 endif()
 target_include_directories(myplugin PUBLIC include)
 
-# 3.16 doesn't care, but 3.7 on Debian old stable reserves "test".
+# 3.13 doesn't care, but 3.7 on Debian old stable reserves "test".
 # If you want to use old CMake, rename it below.
 #
 add_executable(test tests/test.cpp)
