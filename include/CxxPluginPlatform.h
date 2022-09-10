@@ -56,13 +56,12 @@
 #	endif
 #	include <windows.h>
 #	define CXXPLUGIN_API __declspec(dllexport)
-#elif defined(__APPLE__)	/* likely must come before the POSIX check */
+#elif defined(__APPLE__)
 #	define CXXPLUGIN_HANDLE_T 	void *
 #	define CXXPLUGIN_SO_EXT		".dylib"
 #	define CXXPLUGIN_OS_MACOS
 #	include <dlfcn.h>
 #	define CXXPLUGIN_API /* assumed to be sane */
-#	error "Hmm, what happened to POSIX compliance..."
 #elif defined(_POSIX_VERSION) || defined(__unix__) || defined(IS_UNIX)
 #	define CXXPLUGIN_HANDLE_T 	void *
 #	define CXXPLUGIN_SO_EXT		".so"
