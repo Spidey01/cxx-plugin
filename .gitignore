@@ -6,8 +6,10 @@
 *.exp
 *.dylib
 *.exe
-tests/test
-doc/html
-.ninja_*
-Makefile
-build.ninja
+/tests/test
+/doc/html
+'.ninja_*
+/Makefile
+/build.ninja
+/CMakeLists.txt
+/build*
