@@ -57,9 +57,6 @@ The makefiles have a target called "docs" that will run doxygen. It assumes that
 NOTES:
 =====
 
-I don't have a Mac, so can't test whether or not it actually *works* under Mac
-OS X.  If you do and it does, please send me a message ;). Patches welcome.
-
 Support for using a custom file extension might be added later, either via the
 constructor or a compile time preprocessor directive.
 
